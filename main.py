@@ -15,8 +15,8 @@ from psycopg2.extensions import AsIs
 # ==============================================================================
 
 # File and Table Configuration
-FILE_PATH = "/Users/rohitgoswami/Downloads/kamrupDealerListforDB.xlsx"
-SHEET_NAME = "Sheet1"
+FILE_PATH = "/Users/rohitgoswami/Downloads/neon_ready_subdealers2.xlsx"
+SHEET_NAME = "neon_ready_subdealers2"
 START_ROW_TO_SKIP = 1
 
 # Target table and columns in your Neon database
@@ -24,13 +24,13 @@ TARGET_TABLE = "dealers"
 
 # This 24-column list is correct
 TARGET_COLUMNS = [
-    "id", "user_id", "type", "name", "region", "area", "phone_no", 
+    "id", "user_id", "type", "parent_dealer_id", "name", "region", "area", "phone_no", 
     "address", "total_potential", "best_potential", "brand_selling", "feedbacks", 
     "remarks", "pinCode", "dateOfBirth", "anniversaryDate", "latitude", "longitude",
     "verification_status", "business_type", "nameOfFirm", "underSalesPromoterName", 
     "gstin_no", "pan_no"
 ]
-EXPECTED_COLUMNS = len(TARGET_COLUMNS) # This is 24
+EXPECTED_COLUMNS = len(TARGET_COLUMNS)
 
 
 # ==============================================================================
@@ -141,12 +141,10 @@ if __name__ == "__main__":
             engine='openpyxl'
         )
 
-        # Read 23 columns from your file (0 to 22)
-        df = df.iloc[:, :23]
+        df = df.iloc[:, :24]
         
-        # This list has 23 names, one for each column
         df.columns = [
-            "user_id", "type", "name", "region", "area", "phone_no", 
+            "user_id", "type", "parent_dealer_id", "name", "region", "area", "phone_no", 
             "address", "total_potential", "best_potential", "brand_selling", "feedbacks",
             "remarks", "pinCode", "dateOfBirth", "anniversaryDate", "latitude", "longitude",
             "verificationStatus", "business_type", "nameOfFirm", "underSalesPromoterName", 
@@ -176,7 +174,7 @@ if __name__ == "__main__":
 
         # !!! FIX: Remove date_cols from the string_cols list
         string_cols = [
-            'type', 'name', 'region', 'area', 'address', 'feedbacks', 'remarks', 
+            'type', 'parent_dealer_id', 'name', 'region', 'area', 'address', 'feedbacks', 'remarks', 
             'pinCode', 'verificationStatus', 'business_type', 'nameOfFirm', 
             'underSalesPromoterName', 'gstin_no', 'pan_no'
         ]
@@ -196,35 +194,34 @@ if __name__ == "__main__":
             else:
                 brand_list_or_none = [str(brand_selling_value).strip()]
 
-            # This tuple has 24 items, in the order of TARGET_COLUMNS
             data_tuple = (
                 str(uuid.uuid4()),  # 1. id
                 row['user_id'],     # 2. user_id
                 row['type'],        # 3. type
-                row['name'],        # 4. name
-                row['region'],      # 5. region
-                row['area'],        # 6. area
-                row['phone_no'],    # 7. phone_no
-                row['address'],     # 8. address
-                row['total_potential'], # 9. total_potential
-                row['best_potential'],  # 10. best_potential
-                brand_list_or_none,     # 11. brand_selling
-                row['feedbacks'],   # 12. feedbacks
-                row['remarks'],     # 13. remarks
-                row['pinCode'],     # 14. pinCode
-                row['dateOfBirth'], # 15. dateOfBirth (will be None or a date object)
-                row['anniversaryDate'], # 16. anniversaryDate (will be None or a date object)
-                row['latitude'],    # 17. latitude
-                row['longitude'],   # 18. longitude
-                row['verificationStatus'], # 19. verification_status
-                row['business_type'], # 20. business_type
-                row['nameOfFirm'],  # 21. nameOfFirm
-                row['underSalesPromoterName'], # 22. underSalesPromoterName
-                row['gstin_no'],    # 23. gstin_no
-                row['pan_no']       # 24. pan_no
+                row['parent_dealer_id'], # 4. parent_dealer_id
+                row['name'],        # 5. name
+                row['region'],      # 6. region
+                row['area'],        # 7. area
+                row['phone_no'],    # 8. phone_no
+                row['address'],     # 9. address
+                row['total_potential'], # 10. total_potential
+                row['best_potential'],  # 11. best_potential
+                brand_list_or_none,     # 12. brand_selling
+                row['feedbacks'],   # 13. feedbacks
+                row['remarks'],     # 14. remarks
+                row['pinCode'],     # 15. pinCode
+                row['dateOfBirth'], # 16. dateOfBirth (will be None or a date object)
+                row['anniversaryDate'], # 17. anniversaryDate (will be None or a date object)
+                row['latitude'],    # 18. latitude
+                row['longitude'],   # 19. longitude
+                row['verificationStatus'], # 20. verification_status
+                row['business_type'], # 21. business_type
+                row['nameOfFirm'],  # 22. nameOfFirm
+                row['underSalesPromoterName'], # 23. underSalesPromoterName
+                row['gstin_no'],    # 24. gstin_no
+                row['pan_no']       # 25. pan_no
             )
             
-            # This check is if 24 != 24, which is FALSE
             if len(data_tuple) != EXPECTED_COLUMNS:
                 print(f"SKIPPING ROW {index+START_ROW_TO_SKIP+1}: Incorrect tuple length.")
                 continue
