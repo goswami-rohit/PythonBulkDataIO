@@ -17,20 +17,13 @@ TARGET_TABLE = "verified_dealers"
 
 # --- Columns EXACTLY as in Neon schema (except serial id) ---
 TARGET_COLUMNS = [
-    "dealer_code",
-    "dealer_category",
-    "is_subdealer",
     "dealer_party_name",
     "zone",
     "area",
     "contact_no1",
     "contact_no2",
     "email",
-    "address",
     "pin_code",
-    "related_sp_name",
-    "owner_proprietor_name",
-    "nature_of_firm",
     "gst_no",
     "pan_no"
 ]
