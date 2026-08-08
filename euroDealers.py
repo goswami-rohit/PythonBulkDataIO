@@ -8,8 +8,8 @@ import re
 # CONFIG
 # ==============================================================================
 
-FILE_PATH = "/Users/rohitgoswami/Downloads/euroDealersList.xlsx"
-SHEET_NAME = "Sheet2"
+FILE_PATH = "/Users/rohitgoswami/Downloads/euroDealersList2.xlsx"
+SHEET_NAME = "Sheet1"
 
 # ==============================================================================
 # HELPERS
